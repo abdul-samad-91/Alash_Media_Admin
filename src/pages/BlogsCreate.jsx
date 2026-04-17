@@ -85,6 +85,7 @@ const BlogsCreate = () => {
       }
 
       const response = await blogService.create(preparedData)
+      console.log('Create blog response:', response)
 
       if (response.success) {
         toast.success(response.message || 'Blog created successfully!')

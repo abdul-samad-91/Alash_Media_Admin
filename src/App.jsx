@@ -6,6 +6,10 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import BlogsList from './pages/BlogsList'
 import BlogsCreate from './pages/BlogsCreate'
+import AuthorsList from './pages/AuthorsList'
+import AuthorsCreate from './pages/AuthorsCreate'
+import CategoriesList from './pages/CategoriesList'
+import CategoriesCreate from './pages/CategoriesCreate'
 import { setUser } from './store/slices/authSlice'
 import authService from './services/authService'
 
@@ -45,6 +49,22 @@ function App() {
         <Route
           path="/blogs/create"
           element={isAuthenticated ? <BlogsCreate /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/authors"
+          element={isAuthenticated ? <AuthorsList /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/authors/create"
+          element={isAuthenticated ? <AuthorsCreate /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/categories"
+          element={isAuthenticated ? <CategoriesList /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/categories/create"
+          element={isAuthenticated ? <CategoriesCreate /> : <Navigate to="/login" />}
         />
         <Route
           path="/"
