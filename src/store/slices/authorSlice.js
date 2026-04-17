@@ -39,13 +39,13 @@ const authorSlice = createSlice({
       state.authors.unshift(action.payload)
     },
     updateAuthor: (state, action) => {
-      const index = state.authors.findIndex(a => a._id === action.payload._id)
+      const index = state.authors.findIndex((a) => a.id === action.payload.id)
       if (index !== -1) {
         state.authors[index] = action.payload
       }
     },
     deleteAuthor: (state, action) => {
-      state.authors = state.authors.filter(a => a._id !== action.payload)
+      state.authors = state.authors.filter((a) => a.id !== action.payload)
     },
   },
 })

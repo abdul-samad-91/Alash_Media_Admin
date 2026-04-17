@@ -12,8 +12,6 @@ const authorService = {
   update: (id, data) => apiClient.put(`/authors/${id}`, data),
   
   delete: (id) => apiClient.delete(`/authors/${id}`),
-  
-  getAuthorBlogs: (id, params) => apiClient.get(`/authors/${id}/blogs`, { params }),
 }
 
 export default authorService

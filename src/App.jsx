@@ -10,6 +10,9 @@ import AuthorsList from './pages/AuthorsList'
 import AuthorsCreate from './pages/AuthorsCreate'
 import CategoriesList from './pages/CategoriesList'
 import CategoriesCreate from './pages/CategoriesCreate'
+import BannersList from './pages/BannersList'
+import VotesList from './pages/VotesList'
+import GalleriesList from './pages/GalleriesList'
 import { setUser } from './store/slices/authSlice'
 import authService from './services/authService'
 
@@ -51,11 +54,19 @@ function App() {
           element={isAuthenticated ? <BlogsCreate /> : <Navigate to="/login" />}
         />
         <Route
+          path="/blogs/:id/edit"
+          element={isAuthenticated ? <BlogsCreate /> : <Navigate to="/login" />}
+        />
+        <Route
           path="/authors"
           element={isAuthenticated ? <AuthorsList /> : <Navigate to="/login" />}
         />
         <Route
           path="/authors/create"
+          element={isAuthenticated ? <AuthorsCreate /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/authors/:id/edit"
           element={isAuthenticated ? <AuthorsCreate /> : <Navigate to="/login" />}
         />
         <Route
@@ -67,7 +78,43 @@ function App() {
           element={isAuthenticated ? <CategoriesCreate /> : <Navigate to="/login" />}
         />
         <Route
+          path="/categories/:id/edit"
+          element={isAuthenticated ? <CategoriesCreate /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/banners"
+          element={isAuthenticated ? <BannersList /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/banners/create"
+          element={isAuthenticated ? <BannersList mode="create" /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/votes"
+          element={isAuthenticated ? <VotesList /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/votes/create"
+          element={isAuthenticated ? <VotesList mode="create" /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/gallery/photos"
+          element={isAuthenticated ? <GalleriesList type="photo" /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/gallery/videos"
+          element={isAuthenticated ? <GalleriesList type="video" /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/media"
+          element={<Navigate to="/gallery/photos" />}
+        />
+        <Route
           path="/"
+          element={<Navigate to={isAuthenticated ? '/dashboard' : '/login'} />}
+        />
+        <Route
+          path="*"
           element={<Navigate to={isAuthenticated ? '/dashboard' : '/login'} />}
         />
       </Routes>

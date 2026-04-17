@@ -9,6 +9,7 @@ import toast from 'react-hot-toast'
 const BlogForm = ({ onSubmit, initialData = null, isLoading = false, categories = [], authors = [] }) => {
   const [formData, setFormData] = useState({
     title: '',
+    contentType: 'blog',
     subtitle: '',
     slug: '',
     shortDescription: '',
@@ -197,6 +198,17 @@ const BlogForm = ({ onSubmit, initialData = null, isLoading = false, categories 
             required
           />
 
+          <Select
+            label="Content Type"
+            name="contentType"
+            value={formData.contentType}
+            onChange={handleChange}
+            options={[
+              { value: 'blog', label: 'Blog' },
+              { value: 'news', label: 'News' },
+            ]}
+          />
+
           <Input
             label="Slug *"
             name="slug"
@@ -328,7 +340,7 @@ const BlogForm = ({ onSubmit, initialData = null, isLoading = false, categories 
         <Card className="space-y-4">
           <h3 className="text-lg font-semibold text-gray-900">Metadata</h3>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Select
               label="Author *"
               name="author"
@@ -360,9 +372,7 @@ const BlogForm = ({ onSubmit, initialData = null, isLoading = false, categories 
               error={errors.category}
               required
             />
-          </div>
 
-          <div className="grid grid-cols-2 gap-4">
             <Select
               label="Status"
               name="status"
@@ -373,7 +383,9 @@ const BlogForm = ({ onSubmit, initialData = null, isLoading = false, categories 
                 { value: 'published', label: 'Published' },
               ]}
             />
+          </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               label="Read Time (minutes)"
               name="readTime"
@@ -504,7 +516,9 @@ const BlogForm = ({ onSubmit, initialData = null, isLoading = false, categories 
             Preview
           </Button>
           <Button type="submit" isLoading={isLoading}>
-            {initialData ? 'Update Blog' : 'Create Blog'}
+            {initialData
+              ? formData.contentType === 'news' ? 'Update News' : 'Update Blog'
+              : formData.contentType === 'news' ? 'Create News' : 'Create Blog'}
           </Button>
         </Card>
       </form>

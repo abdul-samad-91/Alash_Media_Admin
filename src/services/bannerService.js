@@ -10,8 +10,6 @@ const bannerService = {
   update: (id, data) => apiClient.put(`/banners/${id}`, data),
   
   delete: (id) => apiClient.delete(`/banners/${id}`),
-  
-  toggle: (id) => apiClient.patch(`/banners/${id}/toggle`, {}),
 }
 
 export default bannerService
