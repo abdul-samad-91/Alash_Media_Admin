@@ -91,9 +91,8 @@ const BlogsCreate = () => {
     
     try {
       let featuredImageUrl = null;
-
-      // If image is base64, try to upload it
-      if (isBase64DataUrl(formData.featuredImage)) {
+      
+      if (formData.featuredImage) {
         try {
           toast.loading('Uploading image...')
           featuredImageUrl = await uploadImage(formData.featuredImage, 'blog_featured_image')
@@ -104,6 +103,7 @@ const BlogsCreate = () => {
           return
         }
       }
+      console.log(featuredImageUrl)
 
       const preparedData = {
         title: formData.title,
