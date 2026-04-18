@@ -47,14 +47,13 @@ const BlogsCreate = () => {
     setIsLoading(true)
     
     try {
-      let featuredImageUrl = formData.featuredImage
+      let featuredImageUrl = null;
 
       // If image is base64, try to upload it
       if (isBase64DataUrl(formData.featuredImage)) {
         try {
           toast.loading('Uploading image...')
-          const file = dataUrlToFile(formData.featuredImage, `featured-${Date.now()}.png`)
-          featuredImageUrl = await uploadImage(file, 'blog_featured_image')
+          featuredImageUrl = await uploadImage(formData.featuredImage, 'blog_featured_image')
           toast.dismiss()
         } catch (uploadError) {
           console.warn('Image upload failed, sending as base64:', uploadError)

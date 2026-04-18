@@ -86,7 +86,7 @@ const BlogForm = ({ onSubmit, initialData = null, isLoading = false, categories 
         setPreview(event.target.result)
         setFormData((prev) => ({
           ...prev,
-          featuredImage: event.target.result,
+          featuredImage: file,
         }))
       }
       reader.readAsDataURL(file)

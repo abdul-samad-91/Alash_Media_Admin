@@ -12,11 +12,12 @@ export const uploadImage = async (file, type = 'blog_featured_image') => {
   formData.append('type', type)
 
   try {
-    const response = await apiClient.post('/upload', formData, {
+    const response = await apiClient.post('/upload/single', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     })
+    console.log('Image upload response:', response)
     return response.data?.url || response.data?.data?.url
   } catch (error) {
     throw new Error(`Image upload failed: ${error.message}`)

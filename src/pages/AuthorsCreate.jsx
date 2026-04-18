@@ -16,16 +16,16 @@ const AuthorsCreate = () => {
 
   const handleSubmit = async (formData) => {
     setIsLoading(true)
-    
+    console.log('Form data submitted:', formData)
     try {
-      let photoUrl = formData.photo
-
+      let photoUrl= null;
+      console.log('Form data submitted:', photoUrl);
       // If image is base64, try to upload it
-      if (formData.photo && isBase64DataUrl(formData.photo)) {
+      if (formData.photo) {
         try {
           toast.loading('Uploading photo...')
-          const file = dataUrlToFile(formData.photo, `author-${Date.now()}.png`)
-          photoUrl = await uploadImage(file, 'author_photo')
+          photoUrl = await uploadImage(formData.photo, 'author_photo')
+          console.log('Photo upload URL:', photoUrl)
           toast.dismiss()
         } catch (uploadError) {
           console.warn('Image upload failed, sending as base64:', uploadError)

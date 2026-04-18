@@ -55,9 +55,10 @@ const AuthorForm = ({ onSubmit, initialData = null, isLoading = false }) => {
       const reader = new FileReader()
       reader.onload = (event) => {
         setPreview(event.target.result)
+        // console.log('Image preview URL:', event.target.result)
         setFormData((prev) => ({
           ...prev,
-          photo: event.target.result,
+          photo: e.target.files[0]
         }))
       }
       reader.readAsDataURL(file)
