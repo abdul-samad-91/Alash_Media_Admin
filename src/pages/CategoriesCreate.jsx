@@ -55,7 +55,7 @@ const CategoriesCreate = () => {
       const preparedData = {
         name: formData.name,
         description: formData.description || null,
-        parentCategory: formData.parentCategory ? parseInt(formData.parentCategory) : null,
+        parentCategory: formData.parentCategory|| null,
         isActive: formData.isActive,
       }
 
