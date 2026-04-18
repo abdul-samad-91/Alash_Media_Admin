@@ -39,13 +39,13 @@ const voteSlice = createSlice({
       state.votes.unshift(action.payload)
     },
     updateVote: (state, action) => {
-      const index = state.votes.findIndex(v => v._id === action.payload._id)
+      const index = state.votes.findIndex((v) => v.id === action.payload.id)
       if (index !== -1) {
         state.votes[index] = action.payload
       }
     },
     deleteVote: (state, action) => {
-      state.votes = state.votes.filter(v => v._id !== action.payload)
+      state.votes = state.votes.filter((v) => v.id !== action.payload)
     },
   },
 })

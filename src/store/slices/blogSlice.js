@@ -39,13 +39,13 @@ const blogSlice = createSlice({
       state.blogs.unshift(action.payload)
     },
     updateBlog: (state, action) => {
-      const index = state.blogs.findIndex(b => b._id === action.payload._id)
+      const index = state.blogs.findIndex((b) => b.id === action.payload.id)
       if (index !== -1) {
         state.blogs[index] = action.payload
       }
     },
     deleteBlog: (state, action) => {
-      state.blogs = state.blogs.filter(b => b._id !== action.payload)
+      state.blogs = state.blogs.filter((b) => b.id !== action.payload)
     },
   },
 })

@@ -10,8 +10,6 @@ const categoryService = {
   update: (id, data) => apiClient.put(`/categories/${id}`, data),
   
   delete: (id) => apiClient.delete(`/categories/${id}`),
-  
-  getTree: () => apiClient.get('/categories/tree'),
 }
 
 export default categoryService

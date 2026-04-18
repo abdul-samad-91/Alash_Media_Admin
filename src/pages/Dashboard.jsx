@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import MainLayout from '../components/layout/MainLayout'
 import { Card } from '../components/common/FormElements'
 import {
@@ -19,6 +20,7 @@ const Dashboard = () => {
     totalCategories: 0,
     activeBanners: 0,
     totalVotes: 0,
+    totalGalleries: 0,
   })
   const [isLoading, setIsLoading] = useState(true)
 
@@ -85,6 +87,13 @@ const Dashboard = () => {
       color: 'pink',
       path: '/votes',
     },
+    {
+      title: 'Galleries',
+      value: stats.totalGalleries,
+      icon: FiImage,
+      color: 'indigo',
+      path: '/gallery/photos',
+    },
   ]
 
   const StatCard = ({ card }) => {
@@ -134,24 +143,24 @@ const Dashboard = () => {
           </h2>
           <ul className="space-y-2">
             <li>
-              <a href="/blogs/create" className="text-blue-600 hover:text-blue-700 font-medium">
+              <Link to="/blogs/create" className="text-blue-600 hover:text-blue-700 font-medium">
                 Create New Blog
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/authors/create" className="text-blue-600 hover:text-blue-700 font-medium">
+              <Link to="/authors/create" className="text-blue-600 hover:text-blue-700 font-medium">
                 Add New Author
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/banners/create" className="text-blue-600 hover:text-blue-700 font-medium">
+              <Link to="/banners/create" className="text-blue-600 hover:text-blue-700 font-medium">
                 Create Banner
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/votes/create" className="text-blue-600 hover:text-blue-700 font-medium">
+              <Link to="/votes/create" className="text-blue-600 hover:text-blue-700 font-medium">
                 Create Poll
-              </a>
+              </Link>
             </li>
           </ul>
         </Card>

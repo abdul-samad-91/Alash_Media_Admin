@@ -10,12 +10,8 @@ const voteService = {
   update: (id, data) => apiClient.put(`/votes/${id}`, data),
   
   delete: (id) => apiClient.delete(`/votes/${id}`),
-  
-  castVote: (id, optionIndex) => apiClient.post(`/votes/${id}/cast`, { optionIndex }),
-  
-  getResults: (id) => apiClient.get(`/votes/${id}/results`),
-  
-  toggle: (id) => apiClient.patch(`/votes/${id}/toggle`, {}),
+
+  castVote: (id, optionId) => apiClient.post(`/votes/${id}/cast`, { optionId }),
 }
 
 export default voteService

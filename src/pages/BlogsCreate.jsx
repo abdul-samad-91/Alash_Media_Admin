@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import MainLayout from '../components/layout/MainLayout'
 import BlogForm from '../components/forms/BlogForm'
 import blogService from '../services/blogService'
 import categoryService from '../services/categoryService'
 import authorService from '../services/authorService'
-import { addBlog } from '../store/slices/blogSlice'
+import { addBlog, updateBlog as updateBlogInStore } from '../store/slices/blogSlice'
 import { fetchCategoriesStart, fetchCategoriesSuccess } from '../store/slices/categorySlice'
 import { fetchAuthorsStart, fetchAuthorsSuccess } from '../store/slices/authorSlice'
 import { isBase64DataUrl, dataUrlToFile, uploadImage } from '../utils/imageUpload'
@@ -14,11 +14,21 @@ import toast from 'react-hot-toast'
 import { getErrorMessage } from '../utils/helpers'
 
 const BlogsCreate = () => {
+  const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const isEditMode = Boolean(id)
   const { categories } = useSelector((state) => state.categories)
   const { authors } = useSelector((state) => state.authors)
+  const [initialData, setInitialData] = useState(null)
+  const [isFetching, setIsFetching] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  const parseReadTime = (value) => {
+    if (!value) return '5'
+    const numeric = String(value).match(/\d+/)
+    return numeric ? numeric[0] : '5'
+  }
 
   useEffect(() => {
     // Fetch categories
@@ -41,7 +51,40 @@ const BlogsCreate = () => {
         }))
       })
       .catch((error) => console.error('Failed to fetch authors:', error))
-  }, [dispatch])
+
+    if (isEditMode) {
+      setIsFetching(true)
+      blogService
+        .getById(id)
+        .then((response) => {
+          const blog = response.data
+          setInitialData({
+            title: blog.title || '',
+            contentType: blog.contentType || 'blog',
+            subtitle: blog.subtitle || '',
+            slug: blog.slug || '',
+            shortDescription: blog.shortDescription || '',
+            content: blog.fullContent || '',
+            mainContentOne: blog.mainContent?.contentOne || '',
+            mainContentTwo: blog.mainContent?.contentTwo || '',
+            featuredImage: blog.image || '',
+            imageCaption: blog.imageCaption || '',
+            author: blog.authorId ? String(blog.authorId) : '',
+            category: blog.category?.id ? String(blog.category.id) : '',
+            status: blog.status || 'draft',
+            readTime: parseReadTime(blog.readTime),
+            tags: blog.tags || [],
+            contentBlocks: blog.content || [],
+            sections: blog.sections || [],
+          })
+        })
+        .catch((error) => {
+          toast.error(getErrorMessage(error))
+          navigate('/blogs')
+        })
+        .finally(() => setIsFetching(false))
+    }
+  }, [dispatch, id, isEditMode, navigate])
 
   const handleSubmit = async (formData) => {
     setIsLoading(true)
@@ -56,16 +99,16 @@ const BlogsCreate = () => {
           featuredImageUrl = await uploadImage(formData.featuredImage, 'blog_featured_image')
           toast.dismiss()
         } catch (uploadError) {
-          console.warn('Image upload failed, sending as base64:', uploadError)
-          // Continue with base64 if upload fails
           toast.dismiss()
+          toast.error('Featured image upload failed. Please check Cloudinary/upload settings and try again.')
+          return
         }
       }
 
       const preparedData = {
         title: formData.title,
+        contentType: formData.contentType,
         subtitle: formData.subtitle,
-        slug: formData.slug,
         shortDescription: formData.shortDescription,
         content: formData.content,
         mainContent: {
@@ -83,19 +126,19 @@ const BlogsCreate = () => {
         sections: formData.sections,
       }
 
-      const response = await blogService.create(preparedData)
-      console.log('Create blog response:', response)
+      const response = isEditMode
+        ? await blogService.update(id, preparedData)
+        : await blogService.create(preparedData)
 
       if (response.success) {
-        toast.success(response.message || 'Blog created successfully!')
-        dispatch(addBlog(response.data))
-        
-        // Navigate to blogs list
-        setTimeout(() => {
-          navigate('/blogs', { 
-            state: { tab: formData.status === 'published' ? 'published' : 'draft' } 
-          })
-        }, 500)
+        const itemLabel = formData.contentType === 'news' ? 'News' : 'Blog'
+        toast.success(response.message || (isEditMode ? `${itemLabel} updated successfully!` : `${itemLabel} created successfully!`))
+        if (isEditMode) {
+          dispatch(updateBlogInStore(response.data))
+        } else {
+          dispatch(addBlog(response.data))
+        }
+        navigate('/blogs')
       }
     } catch (error) {
       const message = getErrorMessage(error)
@@ -110,16 +153,27 @@ const BlogsCreate = () => {
     <MainLayout>
       <div className="max-w-4xl mx-auto space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Create New Blog</h1>
-          <p className="text-gray-600 mt-1">Write and publish a new article</p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {isEditMode ? `Edit ${initialData?.contentType === 'news' ? 'News' : 'Blog'}` : 'Create New Blog/News'}
+          </h1>
+          <p className="text-gray-600 mt-1">
+            {isEditMode ? 'Update existing article details.' : 'Write and publish a new blog post or news item'}
+          </p>
         </div>
 
-        <BlogForm
-          onSubmit={handleSubmit}
-          isLoading={isLoading}
-          categories={categories}
-          authors={authors}
-        />
+        {isEditMode && isFetching ? (
+          <div className="bg-white rounded-lg shadow p-8 text-center text-gray-600">
+            Loading blog details...
+          </div>
+        ) : (
+          <BlogForm
+            onSubmit={handleSubmit}
+            isLoading={isLoading}
+            initialData={initialData}
+            categories={categories}
+            authors={authors}
+          />
+        )}
       </div>
     </MainLayout>
   )

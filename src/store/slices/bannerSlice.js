@@ -39,13 +39,13 @@ const bannerSlice = createSlice({
       state.banners.unshift(action.payload)
     },
     updateBanner: (state, action) => {
-      const index = state.banners.findIndex(b => b._id === action.payload._id)
+      const index = state.banners.findIndex((b) => b.id === action.payload.id)
       if (index !== -1) {
         state.banners[index] = action.payload
       }
     },
     deleteBanner: (state, action) => {
-      state.banners = state.banners.filter(b => b._id !== action.payload)
+      state.banners = state.banners.filter((b) => b.id !== action.payload)
     },
   },
 })

@@ -39,13 +39,13 @@ const gallerySlice = createSlice({
       state.galleries.unshift(action.payload)
     },
     updateGallery: (state, action) => {
-      const index = state.galleries.findIndex(g => g._id === action.payload._id)
+      const index = state.galleries.findIndex((g) => g.id === action.payload.id)
       if (index !== -1) {
         state.galleries[index] = action.payload
       }
     },
     deleteGallery: (state, action) => {
-      state.galleries = state.galleries.filter(g => g._id !== action.payload)
+      state.galleries = state.galleries.filter((g) => g.id !== action.payload)
     },
   },
 })
