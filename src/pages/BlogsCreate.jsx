@@ -92,7 +92,7 @@ const BlogsCreate = () => {
     try {
       let featuredImageUrl = null;
       
-      if (formData.featuredImage) {
+      if (formData.featuredImage && typeof formData.featuredImage !== 'string') {
         try {
           toast.loading('Uploading image...')
           featuredImageUrl = await uploadImage(formData.featuredImage, 'blog_featured_image')
@@ -115,7 +115,7 @@ const BlogsCreate = () => {
           contentOne: formData.mainContentOne,
           contentTwo: formData.mainContentTwo,
         },
-        featuredImage: featuredImageUrl,
+        featuredImage: formData.featuredImage && typeof formData.featuredImage !== 'string' ? featuredImageUrl : formData.featuredImage,
         imageCaption: formData.imageCaption,
         author: formData.author,
         category: formData.category,
